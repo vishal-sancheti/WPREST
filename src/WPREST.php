@@ -88,8 +88,7 @@ class WPREST
         $result = json_decode($response->getBody());
 
         if ($response->getStatusCode() == 201) {
-            $post->setId($result->id);
-            return $post;
+            return $result;
         } else {
             return null;
         }
@@ -108,8 +107,7 @@ class WPREST
         $result = json_decode($response->getBody());
 
         if ($response->getStatusCode() == 204) {
-            $post->setId($result->id);
-            return $post;
+            return $result;
         } else {
             return null;
         }
@@ -144,8 +142,7 @@ class WPREST
         $result = json_decode($response->getBody());
 
         if ($response->getStatusCode() == 201) {
-            $category->setId($result->id);
-            return $category;
+            return $result;
         } else {
             return null;
         }
