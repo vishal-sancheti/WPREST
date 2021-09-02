@@ -10,9 +10,12 @@ class WPREST
     protected $client;
 
     protected $authenticateUrl = 'jwt-auth/v1/token';
+    protected $listPostsUrl = 'wp/v2/posts';
+    protected $listPagesUrl = 'wp/v2/pages';
+    protected $listCategoriesUrl = 'wp/v2/categories';
+    protected $listTagsUrl = 'wp/v2/tags';
     protected $createPostUrl   = 'wp/v2/posts';
     protected $updatePostUrl   = 'wp/v2/posts/{id}';
-    protected $listCategoriesUrl = 'wp/v2/categories';
     protected $createCategoriesUrl = 'wp/v2/categories';
 
     public function __construct()
@@ -24,11 +27,72 @@ class WPREST
         ]]);
     }
 
+    public function listPosts(){
+        $listPostsUrl = $this->getFullUrl($this->listPostsUrl);
+        $response = $this->client->get($listPostsUrl);
+
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 200) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public function listPages(){
+        $listPagesUrl = $this->getFullUrl($this->listPagesUrl);
+        $response = $this->client->get($listPagesUrl);
+
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 200) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public function listCategories(){
+        $listCategoriesUrl = $this->getFullUrl($this->listCategoriesUrl);
+        $response = $this->client->get($listCategoriesUrl);
+
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 200) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public function listTags(){
+        $listTagsUrl = $this->getFullUrl($this->listTagsUrl);
+        $response = $this->client->get($listTagsUrl);
+
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 200) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
     public function createPost(Post $post)
     {
         $createPostUrl = $this->getFullUrl($this->createPostUrl);
-        
+
         $response = $this->client->post($createPostUrl, ['json' => $post]);
+
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 201) {
+            $post->setId($result->id);
+            return $post;
+        } else {
+            return null;
+        }
     }
 
     public function updatePost(Post $post)
@@ -40,13 +104,21 @@ class WPREST
         $updatePostUrl = str_replace('{id}', $postId, $baseUrl);
 
         $response = $this->client->post($updatePostUrl, ['json' => $post]);
-    }
 
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 204) {
+            $post->setId($result->id);
+            return $post;
+        } else {
+            return null;
+        }
+    }
 
     public function findCategoryOrCreate(Category $category)
     {
         $listCategoriesUrl = $this->getFullUrl($this->listCategoriesUrl);
-        
+
         $queryFilter = [
             'search' => $category->getName(),
         ];
@@ -54,7 +126,7 @@ class WPREST
         $response = $this->client->get($listCategoriesUrl, ['query' => $queryFilter]);
 
         $result = json_decode($response->getBody());
-        
+
         if ($result) {
             if ($result[0]->name == $category->getName()) {
                 return Category::build($result[0]);
@@ -77,7 +149,7 @@ class WPREST
         } else {
             return null;
         }
-    } 
+    }
 
     protected function getToken()
     {
@@ -92,9 +164,9 @@ class WPREST
         $authenticateUrl = $this->getFullUrl($this->authenticateUrl);
 
         $response = $templateClient->post($authenticateUrl, ['form_params' => $credentials]);
-        
+
         $result = json_decode($response->getBody(), true);
-        
+
         return $result['token'];
     }
 
