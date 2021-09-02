@@ -91,6 +91,11 @@ class Post implements JsonSerializable
         }
     }
 
+    public function setMeta(array $meta)
+    {
+        $this->meta = $meta;
+    }
+
     public function setContent($content)
     {
         $this->content = $content;
@@ -114,7 +119,7 @@ class Post implements JsonSerializable
     protected function initData()
     {
         $this->initDate();
-        $this->status         = self::STATUS_POST_PUBLISH;
+        $this->status         = self::STATUS_POST_DRAFT;
         $this->password       = '';
         $this->title          = '';
         $this->content        = '';
