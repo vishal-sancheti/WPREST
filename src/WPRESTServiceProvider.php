@@ -15,11 +15,8 @@ class WPRESTServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('wprest', function ($app) {
-            
-            $sender = new Send();
-
-            return $sender;
+        $this->app->bind('wprest', function () {
+            return new WPREST();
         });
     }
 }

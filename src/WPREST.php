@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 use Tradzero\WPREST\Resources\Post;
 use Tradzero\WPREST\Resources\Category;
 
-class Send
+class WPREST
 {
     protected $client;
 
