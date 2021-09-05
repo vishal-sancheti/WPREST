@@ -70,12 +70,12 @@ class Post implements JsonSerializable
     {
         $this->initData();
     }
-    
+
     public function setSlug($slug)
     {
         $this->slug = $slug;
     }
-    
+
     public function setTitle($title)
     {
         $this->title = $title;
@@ -91,7 +91,7 @@ class Post implements JsonSerializable
         }
     }
 
-    public function setMeta(array $meta)
+    public function setMeta($meta)
     {
         $this->meta = $meta;
     }
@@ -119,7 +119,7 @@ class Post implements JsonSerializable
     protected function initData()
     {
         $this->initDate();
-        $this->status         = self::STATUS_POST_DRAFT;
+        $this->status         = self::STATUS_POST_PUBLISH;
         $this->password       = '';
         $this->title          = '';
         $this->content        = '';
@@ -143,6 +143,6 @@ class Post implements JsonSerializable
         $wordpressFormat = 'Y-m-d\TH:i:s';
         $this->date      = $datetime->format($wordpressFormat);
         $this->date_gmt  = $datetime->setTimezone($UTCTimezone)
-                                   ->format($wordpressFormat);
+            ->format($wordpressFormat);
     }
 }
