@@ -14,6 +14,7 @@ class WPREST
     protected $listPagesUrl = 'wp/v2/pages';
     protected $listCategoriesUrl = 'wp/v2/categories';
     protected $listTagsUrl = 'wp/v2/tags';
+    protected $createMediaUrl   = 'wp/v2/media';
     protected $createPostUrl   = 'wp/v2/posts';
     protected $updatePostUrl   = 'wp/v2/posts/{id}';
     protected $createCategoriesUrl = 'wp/v2/categories';
@@ -73,6 +74,34 @@ class WPREST
         $result = json_decode($response->getBody());
 
         if ($response->getStatusCode() == 200) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public function createMedia($filename,$path)
+    {
+        $fdata = file_get_contents($path);
+
+        $headers = [
+            "Content-Disposition" => "form-data; filename=$filename",
+            'Content-Type' => mime_content_type($path),
+        ];
+
+
+        $createMediaUrl = $this->getFullUrl($this->createMediaUrl);
+
+
+        $response = $this->client->post($createMediaUrl, [
+                'headers' => $headers,
+                'body' => $fdata,
+            ]
+        );
+
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 201) {
             return $result;
         } else {
             return null;
