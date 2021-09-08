@@ -71,6 +71,11 @@ class Post implements JsonSerializable
         $this->initData();
     }
 
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
     public function setSlug($slug)
     {
         $this->slug = $slug;
