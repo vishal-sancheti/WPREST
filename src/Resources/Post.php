@@ -40,6 +40,8 @@ class Post implements JsonSerializable
 
     protected $title;
 
+    protected $featured_media;
+
     protected $content;
 
     protected $excerpt;
@@ -85,6 +87,11 @@ class Post implements JsonSerializable
     {
         $this->title = $title;
         $this->updateSlug();
+    }
+
+    public function setFeaturedMedia($media_id)
+    {
+        $this->featured_media = $media_id;
     }
 
     public function setCategories(array $categories)
@@ -134,6 +141,7 @@ class Post implements JsonSerializable
         $this->sticky         = false;
         $this->categories     = [];
         $this->tags           = [];
+        $this->featured_media = null;
     }
 
     protected function updateSlug()
