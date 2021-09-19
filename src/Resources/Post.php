@@ -103,6 +103,15 @@ class Post implements JsonSerializable
         }
     }
 
+    public function setTags(array $tags)
+    {
+        foreach ($tags as $tag) {
+            if ($tag->getId()) {
+                array_push($this->categories, $tag->getId());
+            }
+        }
+    }
+
     public function setMeta($meta)
     {
         $this->meta = $meta;

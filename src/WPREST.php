@@ -4,6 +4,7 @@ namespace Tradzero\WPREST;
 use GuzzleHttp\Client;
 use Tradzero\WPREST\Resources\Post;
 use Tradzero\WPREST\Resources\Category;
+use Tradzero\WPREST\Resources\Tag;
 
 class WPREST
 {
@@ -18,6 +19,7 @@ class WPREST
     protected $createPostUrl   = 'wp/v2/posts';
     protected $updatePostUrl   = 'wp/v2/posts/{id}';
     protected $createCategoriesUrl = 'wp/v2/categories';
+    protected $createTagsUrl = 'wp/v2/tags';
 
     public function __construct()
     {
@@ -147,7 +149,7 @@ class WPREST
         $listCategoriesUrl = $this->getFullUrl($this->listCategoriesUrl);
 
         $queryFilter = [
-            'search' => $category->getName(),
+            'slug' => $category->getSlug(),
         ];
 
         $response = $this->client->get($listCategoriesUrl, ['query' => $queryFilter]);
@@ -155,7 +157,7 @@ class WPREST
         $result = json_decode($response->getBody());
 
         if ($result) {
-            if ($result[0]->name == $category->getName()) {
+            if ($result[0]->name == htmlspecialchars($category->getName())) {
                 return Category::build($result[0]);
             }
         }
@@ -167,6 +169,42 @@ class WPREST
         $createCategoriesUrl = $this->getFullUrl($this->createCategoriesUrl);
 
         $response = $this->client->post($createCategoriesUrl, ['json' => $category]);
+
+        $result = json_decode($response->getBody());
+
+        if ($response->getStatusCode() == 201) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public function findTagOrCreate(Tag $tag)
+    {
+        $listTagsUrl = $this->getFullUrl($this->listTagsUrl);
+
+        $queryFilter = [
+            'slug' => $tag->getSlug(),
+        ];
+
+        $response = $this->client->get($listTagsUrl, ['query' => $queryFilter]);
+
+        $result = json_decode($response->getBody());
+
+        if ($result) {
+            if ($result[0]->name == htmlspecialchars($tag->getName())) {
+                return Tag::build($result[0]);
+            }
+        }
+        return $this->createTag($tag);
+    }
+
+
+    public function createTag(Tag $tag)
+    {
+        $createTagsUrl = $this->getFullUrl($this->createTagsUrl);
+
+        $response = $this->client->post($createTagsUrl, ['json' => $tag]);
 
         $result = json_decode($response->getBody());
 
