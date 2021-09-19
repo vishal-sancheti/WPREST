@@ -107,7 +107,7 @@ class Post implements JsonSerializable
     {
         foreach ($tags as $tag) {
             if ($tag->getId()) {
-                array_push($this->categories, $tag->getId());
+                array_push($this->tags, $tag->getId());
             }
         }
     }
