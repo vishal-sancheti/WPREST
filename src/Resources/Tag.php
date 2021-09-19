@@ -41,6 +41,11 @@ class Tag implements JsonSerializable
         $this->slug = $slug;
     }
 
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
     public function setDescription($description)
     {
         $this->description = $description;
