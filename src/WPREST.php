@@ -173,7 +173,7 @@ class WPREST
         $result = json_decode($response->getBody());
 
         if ($response->getStatusCode() == 201) {
-            return $result;
+            return Category::build($result);
         } else {
             return null;
         }
@@ -209,7 +209,7 @@ class WPREST
         $result = json_decode($response->getBody());
 
         if ($response->getStatusCode() == 201) {
-            return $result;
+            return Tag::build($result);
         } else {
             return null;
         }
