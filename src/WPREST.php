@@ -148,11 +148,12 @@ class WPREST
     {
         $listCategoriesUrl = $this->getFullUrl($this->listCategoriesUrl);
 
+
         $queryFilter = [
             'slug' => $category->getSlug(),
         ];
 
-        $response = $this->client->get($listCategoriesUrl, ['query' => $queryFilter]);
+        $response = $this->client->get($listCategoriesUrl);
 
         $result = json_decode($response->getBody());
 
